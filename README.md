@@ -19,7 +19,7 @@ An uptomated pipeline for plasmid outbreak investigation.
 
 ## Documentation
 
-Documentation for Panaroo can be found [here](https://jqbeh.github.io/PORT)
+Documentation for Panaroo can be found [here](https://jqbeh.github.io/PORT/)
 ## Citation
 
 If you use PORT in your research, please cite this repository.
