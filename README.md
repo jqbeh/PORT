@@ -11,7 +11,7 @@
 
 # PORT
 
-An updated pipeline for pangenome investigation
+An uptomated pipeline for plasmid outbreak investigation.
 
 <p align="center">
 <img src="https://github.com/jqbeh/PORT/blob/main/docs/_figures/port_logo.png?raw=true" alt="alt text" width="500">
