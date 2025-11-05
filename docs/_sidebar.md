@@ -10,5 +10,3 @@
 
 - Visualisation
 
-    - [Plasmid clusters](/vis/clusters.md)
-
