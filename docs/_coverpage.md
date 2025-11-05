@@ -9,7 +9,7 @@
 - Takes long read as input
 - Easily interpretable output
 
-[GitHub](https://github.com/immem-hackathon-2025/PORT)
+[GitHub](https://github.com/jqbeh/PORT)
 [Get Started](gettingstarted/quickstart)
 
 
