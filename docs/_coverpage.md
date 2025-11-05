@@ -3,8 +3,6 @@
 <img src="_figures/port_logo.png" width="370">
 <!-- ![logo](_figures/port_logo.jpeg) { width: 100px; } -->
 
-# PORT
-
 > Plasmid Outbreak Investigation Tool
 
 - Reproducible pipieline for bacterial plasmid assembly and annotation
