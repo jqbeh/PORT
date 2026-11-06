@@ -49,6 +49,23 @@ workflow {
     // 🧬 Conditional Environment Check
     // ─────────────────────────────
 
+    // Fail fast with a clear message if the chosen container engine is missing
+    def engine = workflow.containerEngine
+    if (engine) {
+        def found = ['bash', '-c', "command -v ${engine}"].execute().waitFor() == 0
+        if (!found) {
+            error """
+            The '${workflow.profile}' profile needs '${engine}', but '${engine}' was not found on your PATH.
+            Pick a profile that matches what is installed on this machine:
+              -profile docker       (Docker)
+              -profile apptainer    (Apptainer, common on HPC)
+              -profile singularity  (Singularity, common on HPC)
+              -profile conda        (no containers; activate the port_env conda env first)
+            On HPC you may first need e.g. 'module load apptainer'.
+            """.stripIndent()
+        }
+    }
+
     if (workflow.profile == 'conda') {
         check_env()
     }

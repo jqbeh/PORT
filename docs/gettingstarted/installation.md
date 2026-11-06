@@ -1,7 +1,7 @@
 # Installation
 PORT can be installed by cloning the Github repository and setting up the profiles using Nextflow.
 
-Before cloning the repository, make sure you have [Docker](https://www.docker.com/) installed and running.
+Before cloning the repository, make sure you have **one** of these installed: [Docker](https://www.docker.com/), [Apptainer](https://apptainer.org/) / [Singularity](https://sylabs.io/singularity/) (common on HPC), or [Conda](https://docs.conda.io/). Docker is **not** required.
 
 Install [Nextflow](https://www.nextflow.io/) if you haven't already:
 
@@ -18,7 +18,16 @@ cd PORT
 
 ## ⚙️ Setting Up Profiles
 
-This pipeline supports two execution profiles — **Docker** (default) and **Conda**.  
+This pipeline supports four execution profiles. Choose the one that matches what is installed on your machine:
+
+| Profile | Needs | Use when |
+|---|---|---|
+| `standard` / `docker` (default) | Docker | Your own computer with Docker |
+| `apptainer` | Apptainer | HPC / servers without Docker or root |
+| `singularity` | Singularity | HPC / servers without Docker or root |
+| `conda` | Conda/Mamba + activated `port_env` | No container engine at all |
+
+If the engine for the chosen profile is not on your `PATH`, the pipeline stops at start-up and tells you which profiles to use instead.  
 The behavior depends on whether you specify the `-profile` option when running Nextflow.
 
 ### Docker (default)
@@ -36,7 +45,21 @@ In this mode:
 nextflow run main.nf --input_dir input_folder --output_dir output_folder
 ```
 
-### Conda
+### Apptainer / Singularity (no Docker needed)
+
+Uses the same container images as Docker, pulled and converted automatically by Nextflow. No root access is needed.
+
+```bash
+# on HPC you may need to load the module first
+module load apptainer        # or: module load singularity
+
+# optional: keep the downloaded images in one shared place
+export NXF_APPTAINER_CACHEDIR=$HOME/.apptainer_cache    # or NXF_SINGULARITY_CACHEDIR
+
+nextflow run main.nf --input_dir /path/to/reads --output_dir /path/to/results -profile apptainer -resume
+```
+
+### Conda (no containers)
 
 After cloning the Github repository, run:
 
