@@ -52,6 +52,14 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
 
    - **Bakta** annotation of each plasmid → `bakta/<isolate>.pN/` (GFF3, GenBank, EMBL, TSV, proteins, summary and circular plot). Every sequence is annotated as a circular plasmid named after its plasmid ID. See *Bakta database* below.
 
+   - **Pling** clustering (only with `--clustering pling`) → `pling/`. [Pling](https://github.com/iqbal-lab-org/pling) runs once on the plasmids from **all** isolates together. It groups them into communities by sequence containment, then into subcommunities by DCJ-Indel rearrangement distance. Key outputs:
+     - `pling/dcj_thresh_4_graph/objects/typing.tsv`: the community and subcommunity assigned to each plasmid
+     - `pling/all_plasmids_distances.tsv`: DCJ-Indel distances between plasmid pairs
+     - `pling/dcj_thresh_4_graph/communities/` and `subcommunities/`: interactive HTML network views
+     - `pling/genomes_list.txt`: the plasmid FASTAs that were clustered
+
+     Pling needs at least 2 plasmids. Tune it with `--pling_dcj` (default 4), `--pling_containment_distance` (default 0.5) and `--pling_sourmash`; pass anything else with `--pling_args "..."`.
+
    Isolates with no extracted plasmids are skipped.
 
 6. **AMRFinder Analysis:**  
