@@ -16,29 +16,6 @@ git clone https://github.com/immem-hackathon-2025/PORT.git
 cd PORT
 ```
 
-## 📦 Install with conda
-
-PORT can be installed as a single `port` command, which brings Nextflow and Java with it:
-
-```bash
-conda install -c conda-forge -c bioconda port      # or: mamba install ...
-port --version
-port --assemblies /path/to/assemblies --output_dir /path/to/results -resume
-```
-
-`port` accepts every pipeline and Nextflow option (`--clustering pling`, `-profile conda`, `-resume`, ...). The analysis tools still run in Docker by default, so Docker must be installed and running. Alternatively, use `-profile conda` with the `port_env` environment described below.
-
-The pipeline files are installed in `$CONDA_PREFIX/share/port`. A downloaded Bakta database is kept in `~/.port/databases/bakta` (change with `--bakta_db_cache`).
-
-### Building the conda package (maintainers)
-
-The recipe is in `conda-recipe/`. To release a new version:
-
-1. Bump `version` in `nextflow.config` and `conda-recipe/meta.yaml`, then tag the release on GitHub (e.g. `v1.1.0`).
-2. Put the tarball's checksum in `meta.yaml`: `curl -sL https://github.com/jqbeh/PORT/archive/refs/tags/v1.1.0.tar.gz | sha256sum`
-3. Test locally: `conda build -c conda-forge -c bioconda conda-recipe/`
-4. Publish by copying `conda-recipe/` to `recipes/port/` in a fork of [bioconda-recipes](https://github.com/bioconda/bioconda-recipes) and opening a PR, or by uploading the build to your own anaconda.org channel with `anaconda upload`.
-
 ## ⚙️ Setting Up Profiles
 
 This pipeline supports two execution profiles — **Docker** (default) and **Conda**.  

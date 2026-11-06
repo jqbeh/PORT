@@ -89,7 +89,7 @@ Bakta needs its own database, which comes in two types:
 
 The pipeline uses Bakta v1.12.0, which needs a **v6** database.
 
-**Option 1: let PORT download it.** On the first run, the database is downloaded once into `--bakta_db_cache` (default `~/.port/databases/bakta/`) and reused on every later run:
+**Option 1: let PORT download it.** On the first run, the database is downloaded once into `--bakta_db_cache` (default `databases/bakta/` in the pipeline folder) and reused on every later run:
 ```bash
 nextflow run main.nf --assemblies <dir> --output_dir <dir> --bakta_db_type light   # or full
 ```
