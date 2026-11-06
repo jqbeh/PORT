@@ -20,7 +20,7 @@
 | `--skip_bakta` | Skip Bakta annotation of plasmids | `false` |
 | `--bakta_db` | Existing Bakta DB folder (`db/` or `db-light/`) | not set (download) |
 | `--bakta_db_type` | DB type to download if `--bakta_db` is not set: `light` or `full` | `light` |
-| `--bakta_db_cache` | Where the downloaded Bakta DB is kept between runs | `~/.port/databases/bakta/` |
+| `--bakta_db_cache` | Where the downloaded Bakta DB is kept between runs | `databases/bakta/` |
 
 
 ### Advanced parameters

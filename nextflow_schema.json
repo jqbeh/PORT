@@ -98,7 +98,7 @@
           "type": "string",
           "format": "directory-path",
           "description": "Folder where a downloaded Bakta database is kept and reused between runs",
-          "default": "${HOME}/.port/databases/bakta"
+          "default": "${projectDir}/databases/bakta"
         },
         "plasmid_max_length": {
           "type": "integer",
