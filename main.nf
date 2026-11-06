@@ -24,6 +24,7 @@ include { MOBTYPER_PLASMIDS } from './modules/mobsuite'
 include { PLASMIDFINDER     } from './modules/plasmidfinder'
 include { BAKTA_DB_DOWNLOAD } from './modules/bakta'
 include { BAKTA             } from './modules/bakta'
+include { PLING             } from './modules/pling'
 include { check_env         } from './modules/check_env'
 
 
@@ -120,6 +121,26 @@ workflow {
     // (isolates with no plasmid FASTA are skipped automatically)
     AMRFINDERPLUS_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
     MOBTYPER_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
+
+    // Plasmid clustering (optional): --clustering pling
+    // Pling compares plasmids against each other, so it runs once on the
+    // plasmids from ALL isolates together (needs at least 2 plasmids).
+    if (params.clustering) {
+        if (params.clustering != 'pling') {
+            error "Unknown --clustering '${params.clustering}'. Supported: pling"
+        }
+        all_plasmids = EXTRACT_PLASMIDS.out.plasmids
+            .flatMap { sample_id, files -> files instanceof List ? files : [files] }
+            .collect()
+            .filter { plasmids ->
+                if (plasmids.size() < 2) {
+                    log.warn "Pling skipped: it needs at least 2 plasmids, but only ${plasmids.size()} was extracted."
+                    return false
+                }
+                return true
+            }
+        PLING(all_plasmids)
+    }
 
     // Bakta annotation: one run per plasmid -> bakta/<isolate>.pN/
     if (!params.skip_bakta) {

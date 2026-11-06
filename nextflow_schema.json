@@ -53,6 +53,31 @@
           "default": 1000,
           "minimum": 1
         },
+        "clustering": {
+          "type": "string",
+          "description": "Plasmid clustering method to run on all extracted plasmids. Currently: 'pling'. Not run when unset.",
+          "enum": ["pling"]
+        },
+        "pling_dcj": {
+          "type": "integer",
+          "description": "Pling DCJ-Indel distance threshold",
+          "default": 4
+        },
+        "pling_containment_distance": {
+          "type": "number",
+          "description": "Pling containment distance threshold",
+          "default": 0.5
+        },
+        "pling_sourmash": {
+          "type": "boolean",
+          "description": "Use sourmash to pre-filter plasmid pairs in Pling (faster for large datasets)",
+          "default": false
+        },
+        "pling_args": {
+          "type": "string",
+          "description": "Extra options passed as-is to 'pling cluster align'",
+          "default": ""
+        },
         "skip_bakta": {
           "type": "boolean",
           "description": "Skip Bakta annotation of the extracted plasmids",
