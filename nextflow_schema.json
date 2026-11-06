@@ -48,6 +48,18 @@
           "type": "string",
           "description": "Long read assembler to use",
           "default": "autocycler"
+        },
+        "plasmid_min_length": {
+          "type": "integer",
+          "description": "Minimum length (bp, inclusive) of a circular contig to be extracted as a plasmid FASTA",
+          "default": 1000,
+          "minimum": 1
+        },
+        "plasmid_max_length": {
+          "type": "integer",
+          "description": "Maximum length (bp, exclusive) of a circular contig to be extracted as a plasmid FASTA",
+          "default": 500000,
+          "minimum": 1
         }
       }
     }

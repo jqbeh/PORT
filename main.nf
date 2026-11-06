@@ -15,6 +15,7 @@ include { PORECHOP          } from './modules/preprocess'
 include { NANOPLOT          } from './modules/preprocess'
 include { DRAGONFLYE        } from './modules/long_assemblers'
 include { AUTOCYCLER        } from './modules/long_assemblers'
+include { EXTRACT_PLASMIDS  } from './modules/extract_plasmids'
 include { QUAST             } from './modules/assembly_assess'
 include { AMRFINDERPLUS_RUN } from './modules/amrfinder'
 include { MOBSUITE_RECON    } from './modules/mobsuite'
@@ -107,6 +108,9 @@ workflow {
     // 3️⃣  Common downstream step
     // ─────────────────────────────────────────────
     assemblies_ch.set { assemblies }    
+
+    // extract circular plasmid contigs into one FASTA per plasmid
+    EXTRACT_PLASMIDS(assemblies_ch, params.plasmid_min_length, params.plasmid_max_length)
 
     //assess assembly using quast
     QUAST(assemblies_ch)
