@@ -17,8 +17,10 @@ include { DRAGONFLYE        } from './modules/long_assemblers'
 include { AUTOCYCLER        } from './modules/long_assemblers'
 include { EXTRACT_PLASMIDS  } from './modules/extract_plasmids'
 include { QUAST             } from './modules/assembly_assess'
-include { AMRFINDERPLUS_RUN } from './modules/amrfinder'
+include { AMRFINDERPLUS_RUN      } from './modules/amrfinder'
+include { AMRFINDERPLUS_PLASMIDS } from './modules/amrfinder'
 include { MOBSUITE_RECON    } from './modules/mobsuite'
+include { MOBTYPER_PLASMIDS } from './modules/mobsuite'
 include { PLASMIDFINDER     } from './modules/plasmidfinder'
 include { check_env         } from './modules/check_env'
 
@@ -111,6 +113,11 @@ workflow {
 
     // extract circular plasmid contigs into one FASTA per plasmid
     EXTRACT_PLASMIDS(assemblies_ch, params.plasmid_min_length, params.plasmid_max_length)
+
+    // AMR genes and MOB typing on the extracted plasmids only
+    // (isolates with no plasmid FASTA are skipped automatically)
+    AMRFINDERPLUS_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
+    MOBTYPER_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
 
     //assess assembly using quast
     QUAST(assemblies_ch)

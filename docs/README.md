@@ -46,6 +46,12 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
 5. **Plasmid Extraction:**  
    Every contig that is **circular** (`circular=true`, or `circular=Y` from Dragonflye) and **≥ 1 kb and < 500 kb** is written to its own FASTA file in `assemblies/plasmids/`, numbered in assembly order: isolate `AUSMDU00123` gives `AUSMDU00123.p1.fasta`, `AUSMDU00123.p2.fasta`, … Each header becomes `>AUSMDU00123.p1` followed by the original header, and `AUSMDU00123_plasmids.tsv` lists every extracted plasmid with its source contig and length. Change the size limits with `--plasmid_min_length` and `--plasmid_max_length`.
 
+   The extracted plasmids are then analysed on their own. All plasmids from one isolate are combined into a single FASTA, and each result row is labelled with its plasmid ID (e.g. `AUSMDU00123.p1`):
+   - **AMRFinderPlus** → `plasmid_amrfinder_results/<isolate>_plasmids_amrfinder.tsv` (the `Contig id` column is the plasmid ID)
+   - **MOB-typer** (`mob_typer --multi`) → `plasmid_mobtyper_results/<isolate>_plasmids_mobtyper.tsv`: replicon, relaxase and MPF types, predicted mobility and MOB cluster per plasmid (the `sample_id` column is the plasmid ID)
+
+   Isolates with no extracted plasmids are skipped.
+
 6. **AMRFinder Analysis:**  
    Detection of antimicrobial resistance (AMR) genes using [NCBI AMRFinderPlus](https://github.com/ncbi/amr).  
    The results include identified resistance genes, their drug classes, and associated gene families.
