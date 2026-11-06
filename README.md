@@ -17,6 +17,62 @@ An uptomated pipeline for plasmid outbreak investigation.
 <img src="https://github.com/jqbeh/PORT/blob/main/docs/_figures/port_logo.png?raw=true" alt="alt text" width="500">
 </p>
 
+## Installation
+
+### 1. Requirements
+
+- [Git](https://git-scm.com/)
+- Java 17 or newer (`java -version`)
+- [Nextflow](https://www.nextflow.io/) 24.10.3 or newer
+- **One of:**
+  - [Docker](https://docs.docker.com/engine/install/), installed and running (default; check with `docker info`)
+  - [Conda](https://docs.conda.io/) or Mamba, to use `-profile conda` instead of Docker
+
+Install Nextflow if you don't have it:
+```bash
+curl -s https://get.nextflow.io | bash
+chmod +x nextflow
+mkdir -p ~/bin && mv nextflow ~/bin/
+export PATH="$HOME/bin:$PATH"     # add this line to ~/.bashrc or ~/.zshrc to keep it
+nextflow -version
+```
+
+### 2. Clone PORT
+
+```bash
+git clone https://github.com/jqbeh/PORT.git
+cd PORT
+```
+
+To get the latest version later, run `git pull` inside the `PORT` folder.
+
+### 3a. Docker (default)
+
+Nothing else to install. Each tool's container image is downloaded automatically the first time it is needed, so the first run takes longer. On Linux, add yourself to the `docker` group so Docker works without `sudo`:
+```bash
+sudo usermod -aG docker $USER     # then log out and back in
+```
+
+### 3b. Conda (no Docker)
+
+Create and activate the PORT environment once, then add `-profile conda` to every run:
+```bash
+conda env create -f envs/environment.yml -y
+conda activate port_env
+```
+
+The environment is large because it includes every assembler, so this can take a while. If you already have an environment with the tools, give its name with `--conda_env my_env`.
+
+### 4. Check the installation
+
+```bash
+nextflow run main.nf --assemblies /path/to/a/few/fastas --output_dir test_results -resume
+# or, with conda:
+nextflow run main.nf --assemblies /path/to/a/few/fastas --output_dir test_results -resume -profile conda
+```
+
+The Bakta database (`light` by default, ~1.3 GB) is downloaded on the first run into `databases/bakta/` and reused afterwards. To use a database you already have, add `--bakta_db /path/to/db-light`.
+
 ## Usage
 
 Run from inside the `PORT` folder. Docker must be installed and running, or use `-profile conda` (see the documentation).
