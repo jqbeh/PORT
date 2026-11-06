@@ -3,11 +3,7 @@
 
 # Plasmid Outbreak Reporting Tool (PORT)
 
-<p align="center">
-    <a href="https://creativecommons.org/licenses/by/4.0/">
-        <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" alt="CC BY 4.0 License" height="31"/>
-    </a>
-</p>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 # PORT
 
@@ -16,6 +12,13 @@ An uptomated pipeline for plasmid outbreak investigation.
 <p align="center">
 <img src="https://github.com/jqbeh/PORT/blob/main/docs/_figures/port_logo.png?raw=true" alt="alt text" width="500">
 </p>
+
+## Installation
+
+```bash
+conda install -c conda-forge -c bioconda port
+port --help
+```
 
 ## Documentation
 
@@ -26,4 +29,4 @@ If you use PORT in your research, please cite this repository.
 
 ## License
 
-Distributed under the MIT License.
+Distributed under the [MIT License](LICENSE).
