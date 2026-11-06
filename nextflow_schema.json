@@ -53,6 +53,28 @@
           "default": 1000,
           "minimum": 1
         },
+        "skip_bakta": {
+          "type": "boolean",
+          "description": "Skip Bakta annotation of the extracted plasmids",
+          "default": false
+        },
+        "bakta_db": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Path to an existing Bakta database folder (the db/ or db-light/ folder). If not set, the database is downloaded once into --bakta_db_cache."
+        },
+        "bakta_db_type": {
+          "type": "string",
+          "description": "Bakta database type to download when --bakta_db is not set: 'light' (~1.3 GB download, 3.9 GB unpacked) or 'full' (~30 GB download, 84 GB unpacked)",
+          "enum": ["light", "full"],
+          "default": "light"
+        },
+        "bakta_db_cache": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Folder where a downloaded Bakta database is kept and reused between runs",
+          "default": "${projectDir}/databases/bakta"
+        },
         "plasmid_max_length": {
           "type": "integer",
           "description": "Maximum length (bp, exclusive) of a circular contig to be extracted as a plasmid FASTA",

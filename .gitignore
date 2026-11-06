@@ -5,3 +5,5 @@ work
 *.dag
 *test*
 .venv
+
+databases/
