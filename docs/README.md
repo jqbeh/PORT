@@ -43,11 +43,14 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
 4. **Post-assembly Evaluation:**  
    All assemblies (from FASTQ or FASTA input) are evaluated using **QUAST** and other downstream tools.
 
-5. **AMRFinder Analysis:**  
+5. **Plasmid Extraction:**  
+   Every contig that is **circular** (`circular=true`, or `circular=Y` from Dragonflye) and **≥ 1 kb and < 500 kb** is written to its own FASTA file in `assemblies/plasmids/`, numbered in assembly order: isolate `AUSMDU00123` gives `AUSMDU00123.p1.fasta`, `AUSMDU00123.p2.fasta`, … Each header becomes `>AUSMDU00123.p1` followed by the original header, and `AUSMDU00123_plasmids.tsv` lists every extracted plasmid with its source contig and length. Change the size limits with `--plasmid_min_length` and `--plasmid_max_length`.
+
+6. **AMRFinder Analysis:**  
    Detection of antimicrobial resistance (AMR) genes using [NCBI AMRFinderPlus](https://github.com/ncbi/amr).  
    The results include identified resistance genes, their drug classes, and associated gene families.
 
-6. **MOB-suite Analysis:**  
+7. **MOB-suite Analysis:**  
    Comprehensive plasmid typing and reconstruction using [MOB-suite](https://github.com/phac-nml/mob-suite).  
    This step performs:
    - Plasmid clustering and separation from chromosomal contigs  
@@ -55,7 +58,7 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
    - Mobility classification (MOB, CONJ, or non-mobilisable)  
    - Prediction of plasmid transmissibility and host range.
 
-7. **PlasmidFinder Analysis:**  
+8. **PlasmidFinder Analysis:**  
    Detection of plasmid replicon markers using [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder/src/master/).  
    The tool identifies incompatibility groups (Inc types) and provides replicon-based classification for detected plasmids.
 

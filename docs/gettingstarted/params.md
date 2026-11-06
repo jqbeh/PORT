@@ -10,6 +10,8 @@
 | `--assembler`    | Assembler to use (`autocycler` or `dragonflye`) | `autocycler`           |
 | `--read_type`    | Read type (e.g., `ont_r9`)                      | `ont_r10`              |
 | `--medaka_model` | Medaka model (for Dragonflye polishing)         | `r1041_e82_400bps_sup` |
+| `--plasmid_min_length` | Minimum circular contig length (bp, inclusive) kept as a plasmid | `1000` |
+| `--plasmid_max_length` | Maximum circular contig length (bp, exclusive) kept as a plasmid | `500000` |
 
 
 ### Advanced parameters
