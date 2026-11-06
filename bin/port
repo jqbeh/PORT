@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+#
+# port — command-line entry point for the PORT Nextflow pipeline.
+#
+# Installed by conda as $PREFIX/bin/port, with the pipeline in $PREFIX/share/port.
+# Also works straight from a git checkout (bin/port next to main.nf).
+#
+# Every argument is passed to `nextflow run`, so pipeline options (--assemblies,
+# --clustering pling, ...) and Nextflow options (-profile, -resume, ...) both work:
+#   port --assemblies fastas/ --output_dir results/ --clustering pling -resume
+
+set -euo pipefail
+
+# Resolve the real location of this script (follow the conda symlink)
+src="${BASH_SOURCE[0]}"
+while [[ -L "$src" ]]; do
+    dir="$(cd -P "$(dirname "$src")" && pwd)"
+    src="$(readlink "$src")"
+    [[ "$src" != /* ]] && src="$dir/$src"
+done
+script_dir="$(cd -P "$(dirname "$src")" && pwd)"
+
+if [[ -f "$script_dir/../main.nf" ]]; then
+    PORT_DIR="$(cd "$script_dir/.." && pwd)"                 # git checkout
+elif [[ -f "$script_dir/../share/port/main.nf" ]]; then
+    PORT_DIR="$(cd "$script_dir/../share/port" && pwd)"      # conda install
+else
+    echo "port: cannot find the PORT pipeline (main.nf) next to $script_dir" >&2
+    exit 1
+fi
+
+version="$(sed -n "s/^[[:space:]]*version[[:space:]]*=[[:space:]]*['\"]\([^'\"]*\)['\"].*/\1/p" "$PORT_DIR/nextflow.config" | head -1)"
+
+usage() {
+    cat <<EOF
+PORT v${version} — Plasmid Outbreak Reporting Tool
+
+Usage:
+  port --input_dir <reads_dir>  --output_dir <results_dir> [options] [nextflow options]
+  port --assemblies <fasta_dir> --output_dir <results_dir> [options] [nextflow options]
+
+Main options:
+  --input_dir DIR             Folder of Nanopore FASTQ(.gz) files, one per isolate
+  --assemblies DIR            Folder of assembled FASTA files (skips read QC and assembly)
+  --output_dir DIR            Results folder
+  --assembler NAME            autocycler (default) or dragonflye
+  --read_type TYPE            ont_r10 (default), ont_r9, pacbio_clr, pacbio_hifi
+  --clustering pling          Cluster all extracted plasmids with Pling
+  --bakta_db DIR              Existing Bakta database (db/ or db-light/)
+  --bakta_db_type TYPE        light (default) or full, downloaded if --bakta_db is not set
+  --skip_bakta                Skip Bakta annotation
+  --max_cpus N / --max_memory 16.GB / --max_time 10.h
+
+Useful Nextflow options:
+  -profile conda              Run tools from an activated conda env instead of Docker
+  -resume                     Reuse results from a previous run
+
+Other:
+  port --help | -h            Show this help
+  port --version | -v         Show the PORT version
+
+Pipeline folder: ${PORT_DIR}
+Documentation:   https://jqbeh.github.io/PORT/
+EOF
+}
+
+case "${1:-}" in
+    ""|-h|--help|help) usage; exit 0 ;;
+    -v|--version|version) echo "port ${version}"; exit 0 ;;
+esac
+
+if ! command -v nextflow >/dev/null 2>&1; then
+    echo "port: 'nextflow' was not found on your PATH. Install it with: conda install -c bioconda nextflow" >&2
+    exit 1
+fi
+
+exec nextflow run "${PORT_DIR}/main.nf" "$@"
