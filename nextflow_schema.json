@@ -13,9 +13,8 @@
       "properties": {
         "input_dir": {
           "type": "string",
-          "format": "file-path",
-          "description": "Input sfolder containing FASTQ files. You have to use absolute paths to storage on Cloud infrastructure.",
-          "default": "null"
+          "format": "directory-path",
+          "description": "Input folder containing FASTQ files. You have to use absolute paths to storage on Cloud infrastructure."
         },
         "output_dir": {
           "type": "string",
@@ -27,9 +26,8 @@
         "assemblies": {
           "type": "string",
           "format": "directory-path",
-          "description": "The directory where the assemblies will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-          "fa_icon": "fas fa-folder-open",
-          "default": "null"
+          "description": "Folder of pre-assembled FASTA files (.fa/.fasta) to use instead of reads. You have to use absolute paths to storage on Cloud infrastructure.",
+          "fa_icon": "fas fa-folder-open"
         }
       }
     },
