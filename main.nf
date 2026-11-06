@@ -22,6 +22,8 @@ include { AMRFINDERPLUS_PLASMIDS } from './modules/amrfinder'
 include { MOBSUITE_RECON    } from './modules/mobsuite'
 include { MOBTYPER_PLASMIDS } from './modules/mobsuite'
 include { PLASMIDFINDER     } from './modules/plasmidfinder'
+include { BAKTA_DB_DOWNLOAD } from './modules/bakta'
+include { BAKTA             } from './modules/bakta'
 include { check_env         } from './modules/check_env'
 
 
@@ -118,6 +120,30 @@ workflow {
     // (isolates with no plasmid FASTA are skipped automatically)
     AMRFINDERPLUS_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
     MOBTYPER_PLASMIDS(EXTRACT_PLASMIDS.out.plasmids)
+
+    // Bakta annotation: one run per plasmid -> bakta/<isolate>.pN/
+    if (!params.skip_bakta) {
+        if (params.bakta_db) {
+            // use an existing Bakta DB (the db/ or db-light/ folder)
+            bakta_db_ch = channel.value(file(params.bakta_db, checkIfExists: true))
+        } else {
+            if (!(params.bakta_db_type in ['light', 'full'])) {
+                error "--bakta_db_type must be 'light' or 'full' (got '${params.bakta_db_type}')."
+            }
+            // download once into --bakta_db_cache, reused on later runs
+            BAKTA_DB_DOWNLOAD(params.bakta_db_type)
+            bakta_db_ch = BAKTA_DB_DOWNLOAD.out.db.first()
+        }
+
+        plasmid_fastas = EXTRACT_PLASMIDS.out.plasmids
+            .flatMap { sample_id, files ->
+                (files instanceof List ? files : [files]).collect { f ->
+                    tuple(sample_id, f.name.replaceFirst(/\.fasta$/, ''), f)
+                }
+            }
+
+        BAKTA(plasmid_fastas, bakta_db_ch)
+    }
 
     //assess assembly using quast
     QUAST(assemblies_ch)

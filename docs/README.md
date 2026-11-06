@@ -50,6 +50,8 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
    - **AMRFinderPlus** → `plasmid_amrfinder_results/<isolate>_plasmids_amrfinder.tsv` (the `Contig id` column is the plasmid ID)
    - **MOB-typer** (`mob_typer --multi`) → `plasmid_mobtyper_results/<isolate>_plasmids_mobtyper.tsv`: replicon, relaxase and MPF types, predicted mobility and MOB cluster per plasmid (the `sample_id` column is the plasmid ID)
 
+   - **Bakta** annotation of each plasmid → `bakta/<isolate>.pN/` (GFF3, GenBank, EMBL, TSV, proteins, summary and circular plot). Every sequence is annotated as a circular plasmid named after its plasmid ID. See *Bakta database* below.
+
    Isolates with no extracted plasmids are skipped.
 
 6. **AMRFinder Analysis:**  
@@ -68,5 +70,26 @@ nextflow run main.nf --assemblies /path/to/assemblies --output_dir /path/to/resu
    Detection of plasmid replicon markers using [PlasmidFinder](https://bitbucket.org/genomicepidemiology/plasmidfinder/src/master/).  
    The tool identifies incompatibility groups (Inc types) and provides replicon-based classification for detected plasmids.
 
+## 🧬 Bakta database
 
-ß
+Bakta needs its own database, which comes in two types:
+
+| Type | Download | Unpacked | Notes |
+|---|---|---|---|
+| `light` (default) | ~1.3 GB | ~3.9 GB | Faster and smaller. CDS are annotated against UniRef50 clusters only, and pseudogene detection is skipped |
+| `full` | ~30 GB | ~84 GB | Best annotation and all features |
+
+The pipeline uses Bakta v1.12.0, which needs a **v6** database.
+
+**Option 1: let PORT download it.** On the first run, the database is downloaded once into `--bakta_db_cache` (default `databases/bakta/` in the pipeline folder) and reused on every later run:
+```bash
+nextflow run main.nf --assemblies <dir> --output_dir <dir> --bakta_db_type light   # or full
+```
+
+**Option 2: use a database you already have.** Point to the `db/` or `db-light/` folder:
+```bash
+nextflow run main.nf --assemblies <dir> --output_dir <dir> --bakta_db /path/to/bakta/db-light
+```
+
+To skip Bakta, add `--skip_bakta`.
+
